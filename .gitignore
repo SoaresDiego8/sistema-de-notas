@@ -1,5 +1,5 @@
 # Ignorar credenciais e arquivos sensíveis
-.env
+.envs
 .env.*
 __pycache__/
 *.pyc
@@ -8,3 +8,5 @@ __pycache__/
 instance/
 venv/
 .idea/
+
+
