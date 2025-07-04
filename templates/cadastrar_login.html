@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Criar Conta</title>
+    <link rel="stylesheet" href="/static/login.css">
+</head>
+<body>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-msg alert-{{ category }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <main>
+        <div class="imagem">
+            <img src="/static/to-do-list.jpg" alt="Imagem ilustrativa">
+        </div>
+
+        <div class="formulario">
+            <form action="/cadastrar_login" method="POST" class="formLogin">
+                {{ form.csrf_token }}
+                <h2>Criar conta</h2>
+
+                {{ form.nome.label }}
+                {{ form.nome }}
+
+                {{ form.email.label }}
+                {{ form.email }}
+
+                {{ form.senha.label }}
+                {{ form.senha }}
+
+                {{ form.cadastrar }}
+
+                <div class="registro-lateral">
+                    <p>Já tem uma conta?</p>
+                    <a href="{{ url_for('login') }}">Faça login</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+      setTimeout(() => {
+        const flash = document.querySelector('.flash-msg');
+        if (flash) {
+          flash.style.opacity = '0';
+          setTimeout(() => flash.remove(), 500);
+        }
+      }, 3000);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login no Sistema</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+<body>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-msg alert-{{ category }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <main>
+        <div class="imagem">
+            <img src="{{ url_for('static', filename='to-do-list.jpg') }}" alt="Foto da Interface Login">
+        </div>
+
+        <div class="formulario">
+            <form action="{{ url_for('autenticar_login') }}" method="POST">
+                <input type="hidden" name="proxima" value="{{ proxima }}">
+                {{ form.csrf_token }}
+
+                <div class="formLogin">
+                    {{ form.email.label }}
+                    {{ form.email }}
+
+                    {{ form.logar }}
+                </div>
+                <div class="registro-lateral">
+                    <p>Sem conta ainda?</p>
+                    <a href="{{ url_for('cadastrar_login') }}">Faça seu cadastro</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+      setTimeout(() => {
+        const flash = document.querySelector('.flash-msg');
+        if (flash) {
+          flash.style.opacity = '0';
+          setTimeout(() => flash.remove(), 500);
+        }
+      }, 3000);
+    </script>
+
+</body>
+</html>

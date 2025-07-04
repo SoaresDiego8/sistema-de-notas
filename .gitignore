@@ -1,0 +1,10 @@
+# Ignorar credenciais e arquivos sensíveis
+.env
+.env.*
+__pycache__/
+*.pyc
+*.pyo
+*.db
+instance/
+venv/
+.idea/

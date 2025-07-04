@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Notas (To-Do-List)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-msg alert-{{ category }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <header>
+        <div class="header-content">
+            <div>
+                <h1>Bem-vindo ao seu sistema de notas,</h1>
+                <h2>{{ nome }}</h2>
+            </div>
+            <div class="logout-container">
+                <a href="{{ url_for('logout') }}" class="btn-logout">Sair</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <form action="{{ url_for('index') }}" method="POST">
+            {{ form.csrf_token }}
+            <input type="hidden" name="acao" value="criar">
+            {{ form.nota.label }}
+            {{ form.nota(rows=6) }}
+            <small>Máximo de 500 caracteres.</small>
+            {{ form.salvar }}
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Criação</th>
+                    <th>Nota</th>
+                    <th>Finalização</th>
+                    <th>Status</th>
+                    <th>Excluir</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for l in lista_notas %}
+                <tr>
+                    <td>{{ l.data_criacao.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>{{ l.nota }}</td>
+                    <td>{{ l.data_fim.strftime('%d/%m/%Y %H:%M') if l.data_fim else 'Em aberto' }}</td>
+                    <td>
+                        {% if not l.data_fim %}
+                        <form method="POST" class="inline-form" action="{{ url_for('index') }}">
+                            {{ form.csrf_token }}
+                            <input type="hidden" name="acao" value="finalizar">
+                            <input type="hidden" name="nota_id" value="{{ l.id }}">
+                            <button type="submit" class="btn btn-finalizar" title="Finalizar">✔</button>
+                        </form>
+                        {% else %}
+                            <span style="opacity: 0.5;">✔</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form method="POST" class="inline-form" action="{{ url_for('index') }}">
+                            {{ form.csrf_token }}
+                            <input type="hidden" name="acao" value="apagar">
+                            <input type="hidden" name="nota_id" value="{{ l.id }}">
+                            <button type="submit" class="btn btn-apagar" title="Excluir">🗑</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+      setTimeout(() => {
+        const flash = document.querySelector('.flash-msg');
+        if (flash) {
+          flash.style.opacity = '0';
+          setTimeout(() => flash.remove(), 500);
+        }
+      }, 3000);
+    </script>
+
+</body>
+</html>
